@@ -88,18 +88,35 @@ function showRecipeDetails(meal) {
     }
   }
 
+  // Format instructions with better paragraph breaks
+  const formattedInstructions = meal.strInstructions
+    .split('\r\n')
+    .filter(para => para.trim() !== '')
+    .map(para => `<p>${para}</p>`)
+    .join('');
+
   const modalContent = document.getElementById("modalContent");
   modalContent.innerHTML = `
-                <h2 class="recipe-title">${meal.strMeal}</h2>
-                <img src="${meal.strMealThumb}" alt="${
-    meal.strMeal
-  }" style="width: 100%; max-width: 400px; border-radius: 10px; margin: 1rem 0;">
-                <h3 style="color: var(--neon-orange); margin-top: 1rem;">Ingredients:</h3>
-                <ul class="ingredients-list">
-                    ${ingredients.map((ing) => `<li>${ing}</li>`).join("")}
-                </ul>
-                <h3 style="color: var(--neon-orange);">Instructions:</h3>
-                <p class="instructions">${meal.strInstructions}</p>
+                <div class="recipe-header">
+                    <h2 class="recipe-title">${meal.strMeal}</h2>
+                    <div class="recipe-meta">
+                        <span class="recipe-category">${meal.strCategory || 'N/A'}</span>
+                        <span class="recipe-area">${meal.strArea || 'N/A'}</span>
+                    </div>
+                </div>
+                <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="recipe-detail-image">
+                
+                <div class="recipe-content">
+                    <h3>Ingredients</h3>
+                    <ul class="ingredients-list">
+                        ${ingredients.map((ing) => `<li>${ing}</li>`).join("")}
+                    </ul>
+                    
+                    <h3>Instructions</h3>
+                    <div class="instructions">
+                        ${formattedInstructions || meal.strInstructions}
+                    </div>
+                </div>
             `;
 
   modal.style.display = "block";
